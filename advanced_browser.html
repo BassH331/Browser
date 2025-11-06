@@ -1048,6 +1048,9 @@
                 
                 // Initialize history panel interactions
                 this.initializeHistoryPanel();
+
+                // Attach event listeners for UI controls
+                this.attachStaticEventHandlers();
             }
             
             initializeUI() {
@@ -1092,8 +1095,8 @@
                     }
                     
                     const isPanelClick = this.historyPanel.contains(event.target);
-                    const mainMenu = document.getElementById('mainMenu');
-                    const isMenuClick = mainMenu ? mainMenu.contains(event.target) : false;
+                    const historyButton = document.querySelector('[data-menu-action="openHistory"]');
+                    const isMenuClick = historyButton ? historyButton.contains(event.target) : false;
                     
                     if (!isPanelClick && !isMenuClick) {
                         this.hideHistory();
@@ -1149,8 +1152,23 @@
                 this.pageStatus = document.getElementById('pageStatus');
                 this.backBtn = document.getElementById('backBtn');
                 this.forwardBtn = document.getElementById('forwardBtn');
+                this.reloadBtn = document.getElementById('reloadBtn');
+                this.homeBtn = document.getElementById('homeBtn');
+                this.newTabButton = document.getElementById('newTabButton');
                 this.newTabPage = document.getElementById('newTabPage');
                 this.webviewContainer = document.getElementById('webviewContainer');
+                this.tabBar = document.querySelector('.tab-bar');
+                this.bookmarksBar = document.getElementById('bookmarksBar');
+                this.quickActions = document.querySelector('.quick-actions');
+                this.windowMinimizeBtn = document.getElementById('windowMinimizeBtn');
+                this.windowMaximizeBtn = document.getElementById('windowMaximizeBtn');
+                this.windowCloseBtn = document.getElementById('windowCloseBtn');
+                this.bookmarkBtn = document.getElementById('bookmarkBtn');
+                this.downloadsBtn = document.getElementById('downloadsBtn');
+                this.extensionsBtn = document.getElementById('extensionsBtn');
+                this.profileBtn = document.getElementById('profileBtn');
+                this.mainMenuButton = document.getElementById('mainMenuButton');
+                this.mainMenu = document.getElementById('mainMenu');
                 this.securityIndicator = document.getElementById('securityIndicator');
                 this.bookmarkIcon = document.getElementById('bookmarkIcon');
                 this.currentTimeEl = document.getElementById('currentTime');
@@ -1173,9 +1191,152 @@
                 // Address bar events
                 this.addressBar.addEventListener('input', () => this.onAddressInput());
                 this.addressBar.addEventListener('focus', () => this.selectAddressBar());
+                this.addressBar.addEventListener('blur', () => this.updateSecurityIndicator());
+                this.addressBar.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        this.navigate(this.addressBar.value);
+                    }
+                });
                 
                 // Click outside to close dropdowns
                 document.addEventListener('click', (e) => this.closeDropdowns(e));
+            }
+
+            attachStaticEventHandlers() {
+                if (this.newTabButton) {
+                    this.newTabButton.addEventListener('click', () => this.createNewTab());
+                }
+
+                if (this.windowMinimizeBtn) {
+                    this.windowMinimizeBtn.addEventListener('click', () => minimizeWindow());
+                }
+
+                if (this.windowMaximizeBtn) {
+                    this.windowMaximizeBtn.addEventListener('click', () => maximizeWindow());
+                }
+
+                if (this.windowCloseBtn) {
+                    this.windowCloseBtn.addEventListener('click', () => closeWindow());
+                }
+
+                if (this.backBtn) {
+                    this.backBtn.addEventListener('click', () => this.goBack());
+                }
+
+                if (this.forwardBtn) {
+                    this.forwardBtn.addEventListener('click', () => this.goForward());
+                }
+
+                if (this.reloadBtn) {
+                    this.reloadBtn.addEventListener('click', () => this.reload());
+                }
+
+                if (this.homeBtn) {
+                    this.homeBtn.addEventListener('click', () => this.goHome());
+                }
+
+                if (this.bookmarkBtn) {
+                    this.bookmarkBtn.addEventListener('click', () => this.toggleBookmark());
+                }
+
+                if (this.downloadsBtn) {
+                    this.downloadsBtn.addEventListener('click', () => toggleDownloads());
+                }
+
+                if (this.extensionsBtn) {
+                    this.extensionsBtn.addEventListener('click', () => toggleExtensions());
+                }
+
+                if (this.profileBtn) {
+                    this.profileBtn.addEventListener('click', () => toggleProfile());
+                }
+
+                if (this.mainMenuButton) {
+                    this.mainMenuButton.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                        this.toggleMainMenu();
+                    });
+                }
+
+                if (this.mainMenu) {
+                    this.mainMenu.addEventListener('click', (event) => {
+                        const target = event.target.closest('[data-menu-action]');
+                        if (!target) return;
+                        const action = target.getAttribute('data-menu-action');
+                        if (!action) return;
+                        event.stopPropagation();
+                        this.toggleMainMenu();
+                        switch (action) {
+                            case 'openNewTab':
+                                this.openNewTab();
+                                break;
+                            case 'openNewWindow':
+                                this.openNewWindow();
+                                break;
+                            case 'openIncognito':
+                                this.openIncognito();
+                                break;
+                            case 'openHistory':
+                                this.openHistory();
+                                break;
+                            case 'openDownloads':
+                                this.openDownloads();
+                                break;
+                            case 'openBookmarks':
+                                this.openBookmarks();
+                                break;
+                            case 'openSettings':
+                                this.openSettings();
+                                break;
+                            case 'openDevTools':
+                                this.openDevTools();
+                                break;
+                            case 'showAbout':
+                                this.showAbout();
+                                break;
+                        }
+                    });
+                }
+
+                const handleBookmarkNavigation = (event) => {
+                    const target = event.target.closest('[data-bookmark-url]');
+                    if (!target) return;
+                    const url = target.getAttribute('data-bookmark-url');
+                    if (!url) return;
+                    event.preventDefault();
+                    this.navigate(url);
+                };
+
+                if (this.bookmarksBar) {
+                    this.bookmarksBar.addEventListener('click', handleBookmarkNavigation);
+                }
+
+                if (this.quickActions) {
+                    this.quickActions.addEventListener('click', handleBookmarkNavigation);
+                }
+
+                if (this.tabBar) {
+                    this.tabBar.addEventListener('click', (event) => {
+                        const closeBtn = event.target.closest('[data-tab-close]');
+                        if (closeBtn) {
+                            event.stopPropagation();
+                            const tabId = closeBtn.getAttribute('data-tab-close');
+                            if (tabId) {
+                                this.closeTab(tabId);
+                            }
+                            return;
+                        }
+
+                        const tabElement = event.target.closest('.tab');
+                        if (tabElement) {
+                            const tabId = tabElement.getAttribute('data-tab-id');
+                            if (tabId) {
+                                this.switchToTab(tabId);
+                            }
+                        }
+                    });
+                }
             }
             
             createInitialTab() {
@@ -1333,20 +1494,25 @@
                 const tabElement = document.createElement('div');
                 tabElement.className = 'tab';
                 tabElement.setAttribute('data-tab-id', tab.id);
-                tabElement.innerHTML = `
-                    <div class="tab-favicon">${tab.favicon}</div>
-                    <div class="tab-title">${tab.title}</div>
-                    <button class="tab-close" onclick="browser.closeTab('${tab.id}')">
-                        <i class="fas fa-times"></i>
-                    </button>
-                `;
-                
-                tabElement.addEventListener('click', (e) => {
-                    if (!e.target.closest('.tab-close')) {
-                        this.switchToTab(tab.id);
-                    }
-                });
-                
+
+                const faviconElement = document.createElement('div');
+                faviconElement.className = 'tab-favicon';
+                faviconElement.textContent = tab.favicon;
+
+                const titleElement = document.createElement('div');
+                titleElement.className = 'tab-title';
+                titleElement.textContent = tab.title;
+
+                const closeButton = document.createElement('button');
+                closeButton.className = 'tab-close';
+                closeButton.type = 'button';
+                closeButton.setAttribute('data-tab-close', tab.id);
+                closeButton.innerHTML = '<i class="fas fa-times"></i>';
+
+                tabElement.appendChild(faviconElement);
+                tabElement.appendChild(titleElement);
+                tabElement.appendChild(closeButton);
+
                 document.querySelector('.new-tab-btn').before(tabElement);
             }
             
@@ -1468,15 +1634,15 @@
             }
             
             showNewTabPage() {
-                this.newTabPage.style.display = 'flex';
-                this.webviewContainer.style.display = 'none';
+                this.newTabPage.classList.remove('hidden');
+                this.webviewContainer.classList.add('hidden');
                 this.addressBar.value = 'chrome://newtab';
                 this.updateCurrentTab({ url: 'chrome://newtab', title: 'New Tab' });
             }
             
             showWebview() {
-                this.newTabPage.style.display = 'none';
-                this.webviewContainer.style.display = 'block';
+                this.newTabPage.classList.add('hidden');
+                this.webviewContainer.classList.remove('hidden');
             }
             
             // Utility Functions
