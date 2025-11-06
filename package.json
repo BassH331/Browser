@@ -38,6 +38,8 @@
     "vite": "^4.5.14"
   },
   "dependencies": {
+    "electron-log": "^5.1.2",
+    "electron-updater": "^6.2.1",
     "lucide-react": "^0.290.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
