@@ -40,8 +40,19 @@ const electron_1 = require("electron");
 const electron_log_1 = __importDefault(require("electron-log"));
 const electron_updater_1 = require("electron-updater");
 const path = __importStar(require("path"));
+const url_1 = require("url");
 let mainWindow = null;
+const safeParseHost = (input) => {
+    try {
+        const parsed = new url_1.URL(input);
+        return parsed.hostname.replace(/^www\./, '');
+    }
+    catch {
+        return null;
+    }
+};
 const createWindow = () => {
+    electron_log_1.default.info('Creating main browser window');
     mainWindow = new electron_1.BrowserWindow({
         width: 1200,
         height: 800,
@@ -59,20 +70,24 @@ const createWindow = () => {
     });
     const isDev = process.argv.includes('--dev');
     if (isDev) {
-        mainWindow.loadURL('http://localhost:3000');
-        mainWindow.webContents.openDevTools();
+        electron_log_1.default.info('Loading renderer from Vite dev server http://localhost:3000');
+        mainWindow.loadURL('http://localhost:3000').catch((error) => {
+            electron_log_1.default.error('Failed to load dev server URL', error);
+        });
+        mainWindow.webContents.openDevTools({ mode: 'detach' });
     }
     else {
         // Load the advanced professional browser
-        mainWindow.loadFile(path.join(__dirname, '../../advanced_browser.html'));
-    }
-    if (isDev) {
-        mainWindow.webContents.openDevTools({ mode: 'detach' });
+        const entryFile = path.join(__dirname, '../../advanced_browser.html');
+        electron_log_1.default.info('Loading bundled renderer file', entryFile);
+        mainWindow.loadFile(entryFile).catch((error) => {
+            electron_log_1.default.error('Failed to load bundled renderer', error);
+        });
     }
     const allowedWindowProtocols = new Set(['http:', 'https:']);
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
         try {
-            const parsed = new URL(url);
+            const parsed = new url_1.URL(url);
             if (allowedWindowProtocols.has(parsed.protocol)) {
                 electron_1.shell.openExternal(url);
             }
@@ -86,8 +101,9 @@ const createWindow = () => {
         return { action: 'deny' };
     });
     mainWindow.webContents.on('will-navigate', (event, url) => {
+        electron_log_1.default.debug('will-navigate', { url });
         try {
-            const parsed = new URL(url);
+            const parsed = new url_1.URL(url);
             const isAppFile = parsed.protocol === 'file:' && url.startsWith(`file://${path.join(__dirname).replace(/\\/g, '/')}`);
             if (!isAppFile && !allowedWindowProtocols.has(parsed.protocol)) {
                 console.warn(`Blocked navigation to ${url}`);
@@ -100,9 +116,11 @@ const createWindow = () => {
         }
     });
     mainWindow.once('ready-to-show', () => {
+        electron_log_1.default.info('Main window ready to show');
         mainWindow?.show();
     });
     mainWindow.on('closed', () => {
+        electron_log_1.default.info('Main window closed');
         mainWindow = null;
     });
 };
@@ -117,23 +135,43 @@ electron_1.app.whenReady().then(() => {
     electron_updater_1.autoUpdater.on('download-progress', (progress) => electron_log_1.default.info('Download progress:', progress.percent.toFixed(2) + '%'));
     electron_updater_1.autoUpdater.on('update-downloaded', () => electron_log_1.default.info('Update downloaded. Will install on quit.'));
     createWindow();
+    const trustedOrigins = new Map([
+        ['gizmo.ai', new Set(['geolocation', 'notifications'])]
+    ]);
     electron_1.session.defaultSession.setPermissionRequestHandler((webContents, permission, callback) => {
-        const allowedPermissions = new Set(['clipboard-read']);
-        if (allowedPermissions.has(permission)) {
+        const requestingUrl = webContents.getURL();
+        const host = safeParseHost(requestingUrl);
+        const trustedPermissions = host ? trustedOrigins.get(host) : undefined;
+        electron_log_1.default.warn('Permission request intercepted', { permission, requestingUrl, host });
+        if (permission === 'clipboard-read') {
+            electron_log_1.default.info('Permission allowed (clipboard-read)', { requestingUrl });
             callback(true);
+            return;
         }
-        else {
-            console.warn(`Blocked permission request for: ${permission}`);
-            callback(false);
+        if (trustedPermissions && trustedPermissions.has(permission)) {
+            electron_log_1.default.info('Permission allowed for trusted origin', { permission, host });
+            callback(true);
+            return;
         }
+        electron_log_1.default.warn('Permission denied', { permission, requestingUrl });
+        callback(false);
     });
     electron_1.session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
         const headers = details.responseHeaders || {};
-        const cspKey = Object.keys(headers).find((key) => key.toLowerCase() === 'content-security-policy');
-        if (!cspKey) {
-            headers['Content-Security-Policy'] = [
-                "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://* http://*; connect-src 'self' https://* http://*; child-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self';"
-            ];
+        try {
+            const requestUrl = new url_1.URL(details.url);
+            if (requestUrl.protocol === 'file:') {
+                const cspKey = Object.keys(headers).find((key) => key.toLowerCase() === 'content-security-policy');
+                if (!cspKey) {
+                    electron_log_1.default.info('Injecting fallback CSP for local asset', { url: details.url });
+                    headers['Content-Security-Policy'] = [
+                        "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src 'self'; child-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self';"
+                    ];
+                }
+            }
+        }
+        catch (error) {
+            electron_log_1.default.warn('Failed to evaluate CSP injection target', { url: details.url, error });
         }
         callback({
             responseHeaders: headers
@@ -146,11 +184,12 @@ electron_1.app.whenReady().then(() => {
     });
     electron_1.app.on('web-contents-created', (_event, contents) => {
         contents.on('will-attach-webview', (event, webPreferences, params) => {
+            electron_log_1.default.info('WebView attachment intercepted', { src: params.src, preload: webPreferences.preload });
             webPreferences.nodeIntegration = false;
             webPreferences.contextIsolation = true;
             delete webPreferences.preload;
             if (params.src && !/^https?:\/\//i.test(params.src)) {
-                electron_log_1.default.warn(`Blocked webview attachment to ${params.src}`);
+                electron_log_1.default.warn('Blocked webview attachment to non-http(s) source', { src: params.src });
                 event.preventDefault();
             }
         });
@@ -172,27 +211,38 @@ electron_1.app.on('window-all-closed', () => {
     }
 });
 // IPC handlers for browser functionality
-electron_1.ipcMain.handle('navigate-to', async (event, url) => {
+electron_1.ipcMain.handle('navigate-to', async (_event, url) => {
+    electron_log_1.default.info('IPC navigate-to request', { url });
     return { success: true, url };
 });
-electron_1.ipcMain.handle('go-back', async (event) => {
+electron_1.ipcMain.handle('go-back', async () => {
+    electron_log_1.default.info('IPC go-back request received');
     return { success: true };
 });
-electron_1.ipcMain.handle('go-forward', async (event) => {
+electron_1.ipcMain.handle('go-forward', async () => {
+    electron_log_1.default.info('IPC go-forward request received');
     return { success: true };
 });
-electron_1.ipcMain.handle('reload', async (event) => {
+electron_1.ipcMain.handle('reload', async () => {
+    electron_log_1.default.info('IPC reload request received');
     return { success: true };
 });
-electron_1.ipcMain.handle('get-bookmarks', async (event) => {
+electron_1.ipcMain.handle('get-bookmarks', async () => {
+    electron_log_1.default.info('IPC get-bookmarks request received');
     // In a real implementation, this would read from a file or database
     return [];
 });
-electron_1.ipcMain.handle('add-bookmark', async (event, bookmark) => {
+electron_1.ipcMain.handle('add-bookmark', async (_event, bookmark) => {
+    electron_log_1.default.info('IPC add-bookmark request', bookmark);
     // In a real implementation, this would save to a file or database
     return { success: true };
 });
-electron_1.ipcMain.handle('remove-bookmark', async (event, url) => {
+electron_1.ipcMain.handle('remove-bookmark', async (_event, url) => {
+    electron_log_1.default.info('IPC remove-bookmark request', { url });
     // In a real implementation, this would remove from a file or database
     return { success: true };
+});
+electron_1.ipcMain.on('renderer-log', (_event, payload) => {
+    const { source, event, details } = payload;
+    electron_log_1.default.debug(`[Renderer] ${event}`, { source, details });
 });

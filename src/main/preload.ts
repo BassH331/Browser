@@ -8,6 +8,7 @@ export interface ElectronAPI {
   getBookmarks: () => Promise<Array<{ title: string; url: string }>>;
   addBookmark: (bookmark: { title: string; url: string }) => Promise<{ success: boolean }>;
   removeBookmark: (url: string) => Promise<{ success: boolean }>;
+  logEvent: (payload: { source: string; event: string; details?: unknown }) => void;
 }
 
 const electronAPI: ElectronAPI = {
@@ -18,6 +19,7 @@ const electronAPI: ElectronAPI = {
   getBookmarks: () => ipcRenderer.invoke('get-bookmarks'),
   addBookmark: (bookmark) => ipcRenderer.invoke('add-bookmark', bookmark),
   removeBookmark: (url) => ipcRenderer.invoke('remove-bookmark', url),
+  logEvent: (payload) => ipcRenderer.send('renderer-log', payload)
 };
 
 contextBridge.exposeInMainWorld('electronAPI', electronAPI);

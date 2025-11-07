@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://* http://*; connect-src 'self' https://* http://*; child-src 'self' https://* http://*; frame-src 'self' https://* http://*; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://* http://*; media-src 'self' https://* http://*; connect-src 'self' https://* http://*; child-src 'self' https://* http://*; frame-src 'self' https://* http://*; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self';">
     <title>V3X Browser - Professional Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -62,12 +62,17 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            height: 100%;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--chrome-bg);
+            background: radial-gradient(circle at center, #140421 0%, #06020e 60%, #020007 100%);
             color: var(--chrome-text);
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
         }
@@ -135,11 +140,13 @@
         /* Tab Bar */
         .tab-bar {
             display: flex;
-            background: var(--chrome-surface);
-            border-bottom: 1px solid var(--chrome-border);
+            background: linear-gradient(135deg, rgba(88, 28, 135, 0.65), rgba(30, 64, 175, 0.55));
+            border-bottom: 1px solid rgba(192, 132, 252, 0.25);
             overflow-x: auto;
             scrollbar-width: none;
             -ms-overflow-style: none;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 12px 32px rgba(124, 58, 237, 0.2);
         }
 
         .tab-bar::-webkit-scrollbar {
@@ -147,27 +154,30 @@
         }
 
         .tab {
-            min-width: 200px;
-            max-width: 240px;
-            height: 36px;
+            min-width: 220px;
+            max-width: 260px;
+            height: 46px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 0 16px;
-            background: var(--chrome-surface);
-            border-right: 1px solid var(--chrome-border);
+            gap: 12px;
+            padding: 0 20px;
+            background: linear-gradient(145deg, rgba(55, 18, 94, 0.75), rgba(30, 64, 175, 0.45));
+            border-right: 1px solid rgba(79, 70, 229, 0.35);
             cursor: pointer;
             position: relative;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            color: #ede9fe;
         }
 
         .tab.active {
-            background: var(--chrome-bg);
-            border-bottom: 2px solid var(--v3x-primary);
+            background: linear-gradient(145deg, rgba(109, 40, 217, 0.9), rgba(37, 99, 235, 0.65));
+            border-bottom: 2px solid rgba(224, 231, 255, 0.8);
+            box-shadow: inset 0 -4px 12px rgba(59, 130, 246, 0.35);
         }
 
         .tab:hover:not(.active) {
-            background: var(--chrome-surface-light);
+            background: linear-gradient(145deg, rgba(88, 28, 135, 0.8), rgba(37, 99, 235, 0.4));
+            transform: translateY(-2px);
         }
 
         .tab-favicon {
@@ -337,12 +347,14 @@
         .bookmarks-bar {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 4px 16px;
-            background: var(--chrome-surface);
-            border-bottom: 1px solid var(--chrome-border);
+            gap: 12px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, rgba(59, 7, 100, 0.7), rgba(37, 99, 235, 0.45));
+            border-bottom: 1px solid rgba(192, 132, 252, 0.2);
             overflow-x: auto;
             scrollbar-width: none;
+            box-shadow: inset 0 1px 0 rgba(236, 233, 255, 0.08);
+            backdrop-filter: blur(10px);
         }
 
         .bookmarks-bar::-webkit-scrollbar {
@@ -352,20 +364,24 @@
         .bookmark {
             display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 4px 8px;
-            background: none;
-            border: none;
-            color: var(--chrome-text);
-            font-size: 12px;
+            gap: 10px;
+            padding: 8px 14px;
+            background: rgba(109, 40, 217, 0.25);
+            border: 1px solid rgba(192, 132, 252, 0.35);
+            color: #ede9fe;
+            font-size: 13px;
             cursor: pointer;
-            border-radius: 4px;
+            border-radius: 999px;
             white-space: nowrap;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 24px rgba(88, 28, 135, 0.3);
+            backdrop-filter: blur(6px);
         }
 
         .bookmark:hover {
-            background: var(--chrome-surface-light);
+            background: rgba(109, 40, 217, 0.55);
+            transform: translateY(-3px);
+            box-shadow: 0 16px 30px rgba(76, 29, 149, 0.45);
         }
 
         .bookmark-icon {
@@ -378,7 +394,10 @@
         .content-area {
             flex: 1;
             position: relative;
-            background: var(--chrome-bg);
+            background: transparent;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .webview-container {
@@ -387,10 +406,167 @@
             position: relative;
         }
 
+        .tab-webview {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
         webview {
             width: 100%;
             height: 100%;
             border: none;
+        }
+
+        /* Side panels (history/bookmarks) */
+        .side-panel {
+            position: fixed;
+            top: 48px;
+            right: 0;
+            width: 360px;
+            height: calc(100% - 48px);
+            background: rgba(18, 18, 18, 0.9);
+            backdrop-filter: blur(16px);
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            animation: slideIn 0.25s ease;
+            z-index: 1500;
+        }
+
+        .side-panel.theme-light {
+            background: rgba(255, 255, 255, 0.85);
+            border-left: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .side-panel.hidden {
+            display: none;
+        }
+
+        .side-panel-header {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .side-panel-header h3 {
+            margin: 0;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .side-panel-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #bookmarkSearch {
+            width: 180px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(0, 0, 0, 0.2);
+            color: inherit;
+            outline: none;
+        }
+
+        body.theme-light #bookmarkSearch {
+            border-color: rgba(0, 0, 0, 0.12);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .close-button {
+            border: none;
+            background: none;
+            color: inherit;
+            font-size: 22px;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0 4px;
+        }
+
+        .side-panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 16px 16px;
+        }
+
+        .side-panel-content .empty-state {
+            text-align: center;
+            color: var(--chrome-text-secondary);
+            margin-top: 48px;
+        }
+
+        .side-panel-footer {
+            padding: 12px 16px;
+            font-size: 12px;
+            color: var(--chrome-text-secondary);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .side-panel .bookmark-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            gap: 12px;
+        }
+
+        .side-panel .bookmark-item:last-child {
+            border-bottom: none;
+        }
+
+        .bookmark-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .bookmark-info .title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--chrome-text);
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .bookmark-info .url {
+            font-size: 12px;
+            color: var(--chrome-text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .bookmark-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .bookmark-actions button {
+            border: none;
+            background: rgba(255, 255, 255, 0.12);
+            color: inherit;
+            border-radius: 4px;
+            padding: 6px 8px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        body.theme-light .bookmark-actions button {
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        .bookmark-actions button:hover {
+            background: var(--v3x-primary);
+            color: white;
         }
 
         /* Loading Bar */
@@ -685,13 +861,97 @@
         /* New Tab Page Styles */
         #newTabPage {
             display: none;
+            flex: 1 1 auto;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100%;
-            background: #f8f9fa;
-            padding: 20px;
+            justify-content: flex-start;
+            position: relative;
+            width: 100%;
+            background: radial-gradient(circle at top left, #32104a 0%, #1b0f35 55%, #0b0518 100%);
+            padding: 48px 32px 64px;
+            overflow-y: auto;
+        }
+
+        .newtab-content {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .starfield,
+        .starfield::before,
+        .starfield::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            background: transparent;
+            box-shadow: 1000px 0 0 0 rgba(255, 255, 255, 0.9),
+                        150px 400px 0 0 rgba(214, 173, 255, 0.7),
+                        600px 200px 0 0 rgba(255, 236, 179, 0.8),
+                        950px 350px 0 0 rgba(219, 112, 255, 0.9),
+                        300px 700px 0 0 rgba(171, 129, 255, 0.6),
+                        50px 900px 0 0 rgba(255, 255, 255, 0.8),
+                        780px 600px 0 0 rgba(200, 162, 255, 0.75),
+                        420px 520px 0 0 rgba(255, 214, 255, 0.85),
+                        890px 120px 0 0 rgba(255, 255, 255, 0.6),
+                        180px 260px 0 0 rgba(194, 135, 255, 0.8);
+            animation: twinkle 12s linear infinite;
+            opacity: 0.75;
+        }
+
+        .starfield::before {
+            box-shadow: 40px 300px 0 0 rgba(255, 255, 255, 0.6),
+                        480px 150px 0 0 rgba(215, 160, 255, 0.8),
+                        720px 540px 0 0 rgba(255, 200, 255, 0.7),
+                        1020px 80px 0 0 rgba(255, 255, 255, 0.85),
+                        360px 620px 0 0 rgba(180, 140, 255, 0.75),
+                        900px 440px 0 0 rgba(255, 226, 255, 0.9),
+                        600px 860px 0 0 rgba(193, 164, 255, 0.85),
+                        140px 780px 0 0 rgba(255, 255, 255, 0.65),
+                        820px 300px 0 0 rgba(255, 214, 255, 0.8),
+                        260px 120px 0 0 rgba(255, 255, 255, 0.75);
+            animation-duration: 18s;
+            animation-delay: -6s;
+        }
+
+        .starfield::after {
+            box-shadow: 240px 180px 0 0 rgba(255, 255, 255, 0.65),
+                        520px 360px 0 0 rgba(199, 158, 255, 0.75),
+                        880px 500px 0 0 rgba(175, 130, 255, 0.8),
+                        1080px 260px 0 0 rgba(255, 255, 255, 0.7),
+                        460px 740px 0 0 rgba(210, 170, 255, 0.85),
+                        700px 900px 0 0 rgba(255, 229, 255, 0.6),
+                        80px 540px 0 0 rgba(255, 255, 255, 0.75),
+                        320px 980px 0 0 rgba(198, 150, 255, 0.7),
+                        640px 60px 0 0 rgba(255, 255, 255, 0.8),
+                        940px 700px 0 0 rgba(255, 214, 255, 0.65);
+            animation-duration: 22s;
+            animation-delay: -12s;
+        }
+
+        .starfield {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { transform: translate3d(0, 0, 0); opacity: 0.7; }
+            50% { transform: translate3d(-20px, 10px, 0); opacity: 1; }
+        }
+
+        #newTabPage .intro {
             text-align: center;
+            margin-bottom: 32px;
         }
 
         .v3x-logo-large {
@@ -705,7 +965,7 @@
             color: white;
             font-size: 48px;
             font-weight: bold;
-            margin-bottom: 24px;
+            margin: 0 auto 24px;
             box-shadow: var(--shadow-lg);
         }
 
@@ -722,49 +982,135 @@
         .tagline-large {
             font-size: 18px;
             color: var(--chrome-text-secondary);
-            margin-bottom: 32px;
         }
 
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-top: 32px;
+        .video-wall {
             width: 100%;
-            max-width: 800px;
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin: 0 auto 48px;
         }
 
-        .quick-action {
-            padding: 20px;
-            background: var(--chrome-surface);
-            border: 1px solid var(--chrome-border);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: center;
+        .video-card {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 45px rgba(86, 38, 146, 0.4);
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.6), rgba(192, 132, 252, 0.4));
+            border: 1px solid rgba(192, 132, 252, 0.4);
+            aspect-ratio: 16 / 9;
         }
 
-        .quick-action:hover {
-            background: var(--chrome-surface-light);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
+        .video-card video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .quick-action-icon {
-            font-size: 24px;
-            margin-bottom: 8px;
-            color: var(--v3x-primary);
-        }
-
-        .quick-action-title {
+        .video-card .video-overlay {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            right: 16px;
+            padding: 12px 16px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.85), rgba(59, 130, 246, 0.7));
+            color: #fdf4ff;
             font-size: 14px;
             font-weight: 500;
-            margin-bottom: 4px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 25px rgba(126, 58, 242, 0.4);
         }
 
-        .quick-action-desc {
+        .floating-bookmarks-wrapper {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .floating-bookmarks-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 12px;
+        }
+
+        .floating-bookmarks-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--chrome-text);
+        }
+
+        .floating-bookmarks-grid {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+        }
+
+        .bookmark-card {
+            position: relative;
+            padding: 22px;
+            border-radius: 18px;
+            background: linear-gradient(145deg, rgba(120, 74, 207, 0.92), rgba(168, 85, 247, 0.7));
+            box-shadow: 0 20px 45px rgba(99, 102, 241, 0.35);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(12px);
+            animation: float 6s ease-in-out infinite;
+            border: 1px solid rgba(224, 231, 255, 0.28);
+        }
+
+        body.theme-dark .bookmark-card {
+            background: linear-gradient(145deg, rgba(30, 30, 45, 0.95), rgba(88, 28, 135, 0.85));
+            color: #f8fafc;
+        }
+
+        .bookmark-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 28px 55px rgba(124, 58, 237, 0.45);
+        }
+
+        .bookmark-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #faf5ff;
+        }
+
+        .bookmark-card p {
+            font-size: 13px;
+            color: rgba(237, 233, 254, 0.9);
+        }
+
+        .bookmark-card .bookmark-url {
+            display: block;
+            margin-top: 10px;
             font-size: 12px;
-            color: var(--chrome-text-secondary);
+            color: #c4b5fd;
+            word-break: break-word;
+        }
+
+        .floating-bookmarks-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 48px 24px;
+            background: rgba(76, 29, 149, 0.5);
+            border-radius: 20px;
+            color: rgba(226, 232, 240, 0.85);
+            box-shadow: 0 20px 40px rgba(88, 28, 135, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-12px);
+            }
         }
 
         /* Responsive Design */
@@ -792,6 +1138,7 @@
         .fade-in {
             animation: fadeIn 0.3s ease-out;
         }
+        
     </style>
 </head>
 <body>
@@ -923,21 +1270,21 @@
 
     <!-- Bookmarks Bar -->
     <div class="bookmarks-bar" id="bookmarksBar">
-        <button class="bookmark" type="button" data-bookmark-url="https://github.com">
+        <button class="bookmark" type="button" data-bookmark-url="https://github.com" data-static-bookmark>
             <div class="bookmark-icon">📁</div>
             <span>GitHub</span>
         </button>
-        <button class="bookmark" type="button" data-bookmark-url="https://stackoverflow.com">
-            <div class="bookmark-icon">💬</div>
+        <button class="bookmark" type="button" data-bookmark-url="https://docs.github.com" data-static-bookmark>
+            <div class="bookmark-icon">📘</div>
+            <span>GitHub Docs</span>
+        </button>
+        <button class="bookmark" type="button" data-bookmark-url="https://stackoverflow.com" data-static-bookmark>
+            <div class="bookmark-icon">💡</div>
             <span>Stack Overflow</span>
         </button>
-        <button class="bookmark" type="button" data-bookmark-url="https://developer.mozilla.org">
-            <div class="bookmark-icon">📚</div>
-            <span>MDN Web Docs</span>
-        </button>
-        <button class="bookmark" type="button" data-bookmark-url="https://www.google.com">
-            <div class="bookmark-icon">🔍</div>
-            <span>Google</span>
+        <button class="bookmark" type="button" data-bookmark-url="https://developer.mozilla.org" data-static-bookmark>
+            <div class="bookmark-icon">🧠</div>
+            <span>MDN Docs</span>
         </button>
         <button class="bookmark" type="button" data-bookmark-url="https://news.ycombinator.com">
             <div class="bookmark-icon">📰</div>
@@ -963,49 +1310,40 @@
         
         <!-- New Tab Page -->
         <div id="newTabPage">
-            <div class="v3x-logo-large">V3X</div>
-            <div class="welcome-text">Welcome to V3X Browser</div>
-            <div class="tagline-large">Veni Vidi Vici - We Came, We Saw, We Conquered</div>
-            
-            <div class="quick-actions">
-                <button class="quick-action" type="button" data-bookmark-url="https://github.com">
-                    <div class="quick-action-icon">
-                        <i class="fab fa-github"></i>
-                    </div>
-                    <div class="quick-action-title">GitHub</div>
-                    <div class="quick-action-desc">Code repositories and collaboration</div>
-                </button>
-                
-                <button class="quick-action" type="button" data-bookmark-url="https://stackoverflow.com">
-                    <div class="quick-action-icon">
-                        <i class="fab fa-stack-overflow"></i>
-                    </div>
-                    <div class="quick-action-title">Stack Overflow</div>
-                    <div class="quick-action-desc">Programming Q&A community</div>
-                </button>
-                
-                <button class="quick-action" type="button" data-bookmark-url="https://developer.mozilla.org">
-                    <div class="quick-action-icon">
-                        <i class="fab fa-firefox"></i>
-                    </div>
-                    <div class="quick-action-title">MDN Web Docs</div>
-                    <div class="quick-action-desc">Web development documentation</div>
-                </button>
-                
-                <button class="quick-action" type="button" data-bookmark-url="https://www.google.com">
-                    <div class="quick-action-icon">
-                        <i class="fab fa-google"></i>
-                    </div>
-                    <div class="quick-action-title">Google Search</div>
-                    <div class="quick-action-desc">Search the web</div>
-                </button>
+            <div class="intro">
+                <div class="v3x-logo-large">V3X</div>
+                <div class="welcome-text">Welcome to V3X Browser</div>
+                <div class="tagline-large">Veni Vidi Vici - We Came, We Saw, We Conquered</div>
+            </div>
+
+            <div class="video-wall">
+                <div class="video-card">
+                    <video src="https://samplelib.com/lib/preview/mp4/sample-5s.mp4" autoplay muted loop playsinline></video>
+                    <div class="video-overlay">Ambient city loop — press play for sound</div>
+                </div>
+                <div class="video-card">
+                    <video src="https://samplelib.com/lib/preview/mp4/sample-10s.mp4" autoplay muted loop playsinline></video>
+                    <div class="video-overlay">Tech showcase reel — stay inspired</div>
+                </div>
+                <div class="video-card">
+                    <video src="https://samplelib.com/lib/preview/mp4/sample-12s.mp4" autoplay muted loop playsinline></video>
+                    <div class="video-overlay">Creative montage — fuel your focus</div>
+                </div>
+            </div>
+
+            <div class="floating-bookmarks-wrapper">
+                <div class="floating-bookmarks-header">
+                    <h2>Your Floating Bookmarks</h2>
+                    <span id="bookmarkCount"></span>
+                </div>
+                <div class="floating-bookmarks-grid" id="floatingBookmarksGrid">
+                    <div class="floating-bookmarks-empty" id="floatingBookmarksEmpty">Add bookmarks to see them float here ✨</div>
+                </div>
             </div>
         </div>
 
         <!-- Webview Container -->
-        <div class="webview-container hidden" id="webviewContainer">
-            <webview id="webview" src="about:blank"></webview>
-        </div>
+        <div class="webview-container hidden" id="webviewContainer"></div>
     </div>
 
     <!-- Status Bar -->
@@ -1025,10 +1363,29 @@
         </div>
     </div>
 
+    <!-- Security Exceptions Modal -->
+    <div id="securityExceptionsModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="hideModal('securityExceptionsModal')">&times;</span>
+            <h3>Site Security Exceptions</h3>
+            <div class="exception-form">
+                <input type="text" id="exceptionDomain" placeholder="example.com" class="input-field">
+                <div class="exception-options">
+                    <label><input type="checkbox" id="allowCookies"> Allow Cookies</label>
+                    <label><input type="checkbox" id="allowServiceWorkers"> Allow Service Workers</label>
+                    <label><input type="checkbox" id="allowGeolocation"> Allow Geolocation</label>
+                </div>
+                <button id="addExceptionBtn" class="btn-primary">Add Exception</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // V3X Browser - Professional Edition
         // Complete Chrome/Firefox functionality implementation
         
+        const MODERN_CHROME_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
+
         class V3XBrowser {
             constructor() {
                 this.tabs = new Map();
@@ -1051,6 +1408,8 @@
 
                 // Attach event listeners for UI controls
                 this.attachStaticEventHandlers();
+                this.renderBookmarksBar();
+                this.initializeBookmarkManager();
             }
             
             initializeUI() {
@@ -1146,7 +1505,6 @@
             }
 
             initializeElements() {
-                this.webview = document.getElementById('webview');
                 this.addressBar = document.getElementById('addressBar');
                 this.loadingBar = document.getElementById('loadingBar');
                 this.pageStatus = document.getElementById('pageStatus');
@@ -1159,7 +1517,8 @@
                 this.webviewContainer = document.getElementById('webviewContainer');
                 this.tabBar = document.querySelector('.tab-bar');
                 this.bookmarksBar = document.getElementById('bookmarksBar');
-                this.quickActions = document.querySelector('.quick-actions');
+                this.floatingBookmarksGrid = document.getElementById('floatingBookmarksGrid');
+                this.bookmarkCountLabel = document.getElementById('bookmarkCount');
                 this.windowMinimizeBtn = document.getElementById('windowMinimizeBtn');
                 this.windowMaximizeBtn = document.getElementById('windowMaximizeBtn');
                 this.windowCloseBtn = document.getElementById('windowCloseBtn');
@@ -1175,19 +1534,83 @@
                 this.zoomLevelEl = document.getElementById('zoomLevel');
                 this.connectionStatus = document.getElementById('connectionStatus');
                 this.loadingStatus = document.getElementById('loadingStatus');
+
+                this.webviews = new Map();
+                this.webviewReadyState = new Map();
+                this.pendingNavigations = new Map();
+                this.webview = null;
+
+                this.bookmarksManager = document.getElementById('bookmarksManager');
+                this.bookmarksList = document.getElementById('bookmarksList');
+                this.bookmarkSearchInput = document.getElementById('bookmarkSearch');
+                this.bookmarksCloseBtn = document.getElementById('bookmarksCloseBtn');
             }
-            
+
+            ensureWebview(tabId) {
+                if (this.webviews.has(tabId)) {
+                    return this.webviews.get(tabId);
+                }
+
+                if (!this.webviewContainer) {
+                    console.error('Webview container missing');
+                    return null;
+                }
+
+                const webview = document.createElement('webview');
+                webview.classList.add('tab-webview', 'hidden');
+                webview.setAttribute('data-tab-webview', tabId);
+                webview.setAttribute('allowpopups', '');
+                webview.setAttribute('useragent', MODERN_CHROME_UA);
+                webview.src = 'about:blank';
+
+                this.webviewContainer.appendChild(webview);
+                this.webviews.set(tabId, webview);
+                this.webviewReadyState.set(tabId, false);
+                this.pendingNavigations.delete(tabId);
+
+                this.attachWebviewEvents(webview, tabId);
+                return webview;
+            }
+
+            attachWebviewEvents(webview, tabId) {
+                webview.addEventListener('did-start-loading', () => this.onStartLoading(tabId));
+                webview.addEventListener('did-stop-loading', () => this.onStopLoading(tabId));
+                webview.addEventListener('did-navigate', (event) => this.onNavigate(event, tabId));
+                webview.addEventListener('did-navigate-in-page', (event) => this.onNavigateInPage(event, tabId));
+                webview.addEventListener('page-title-updated', (event) => this.onTitleUpdate(event, tabId));
+                webview.addEventListener('did-fail-load', (event) => this.onLoadFail(event, tabId));
+                webview.addEventListener('new-window', (event) => this.onNewWindow(event));
+                webview.addEventListener('dom-ready', () => this.onDomReady(tabId));
+            }
+
+            setActiveWebview(tabId) {
+                const target = this.ensureWebview(tabId);
+                if (!target) return;
+
+                this.webviews.forEach((view, id) => {
+                    if (id === tabId) {
+                        view.classList.remove('hidden');
+                    } else {
+                        view.classList.add('hidden');
+                    }
+                });
+
+                this.webview = target;
+            }
+
+            getActiveWebview() {
+                return this.webviews.get(this.currentTabId) || null;
+            }
+
+            isWebviewReady(tabId) {
+                return this.webviewReadyState.get(tabId) === true;
+            }
+
+            setWebviewReady(tabId, ready) {
+                this.webviewReadyState.set(tabId, ready);
+            }
+
             setupEventListeners() {
-                // Webview events
-                this.webview.addEventListener('did-start-loading', () => this.onStartLoading());
-                this.webview.addEventListener('did-stop-loading', () => this.onStopLoading());
-                this.webview.addEventListener('did-navigate', (e) => this.onNavigate(e));
-                this.webview.addEventListener('did-navigate-in-page', (e) => this.onNavigateInPage(e));
-                this.webview.addEventListener('page-title-updated', (e) => this.onTitleUpdate(e));
-                this.webview.addEventListener('did-fail-load', (e) => this.onLoadFail(e));
-                this.webview.addEventListener('new-window', (e) => this.onNewWindow(e));
-                this.webview.addEventListener('dom-ready', () => this.onDomReady());
-                
                 // Address bar events
                 this.addressBar.addEventListener('input', () => this.onAddressInput());
                 this.addressBar.addEventListener('focus', () => this.selectAddressBar());
@@ -1312,8 +1735,8 @@
                     this.bookmarksBar.addEventListener('click', handleBookmarkNavigation);
                 }
 
-                if (this.quickActions) {
-                    this.quickActions.addEventListener('click', handleBookmarkNavigation);
+                if (this.floatingBookmarksGrid) {
+                    this.floatingBookmarksGrid.addEventListener('click', handleBookmarkNavigation);
                 }
 
                 if (this.tabBar) {
@@ -1356,81 +1779,121 @@
                 this.updateTabTitle('1', tab.title);
                 this.backBtn.disabled = true;
                 this.forwardBtn.disabled = true;
+                this.ensureWebview('1');
                 this.showNewTabPage();
             }
             
             // Navigation Functions
-            navigate(url) {
-                if (!url) return;
-                
-                // Add http:// if no protocol is specified
-                if (!url.match(/^[a-zA-Z]+:\/\//)) {
-                    url = 'http://' + url;
+            normalizeUrl(input) {
+                if (!input) return null;
+
+                const trimmed = input.trim();
+                if (!trimmed) return null;
+
+                if (/^chrome:\/\//i.test(trimmed)) {
+                    return trimmed.toLowerCase();
                 }
-                
-                // Update address bar
-                this.addressBar.value = url;
-                
-                // Get current tab
+
+                if (/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(trimmed)) {
+                    return trimmed;
+                }
+
+                const looksLikeDomain = /^(?:[\w-]+\.)+[\w-]{2,}$/i.test(trimmed);
+                if (looksLikeDomain) {
+                    return `https://${trimmed}`;
+                }
+
+                const encoded = encodeURIComponent(trimmed);
+                return `https://www.google.com/search?q=${encoded}`;
+            }
+
+            navigate(rawUrl) {
+                const normalizedUrl = this.normalizeUrl(rawUrl);
+                if (!normalizedUrl) {
+                    console.warn('Navigation aborted: invalid input', rawUrl);
+                    return;
+                }
+
+                if (normalizedUrl.startsWith('chrome://')) {
+                    if (normalizedUrl === 'chrome://newtab') {
+                        this.showNewTabPage();
+                        this.updateCurrentTab({ url: normalizedUrl, title: 'New Tab' });
+                        return;
+                    }
+
+                    alert('This internal page is not implemented yet.');
+                    return;
+                }
+
+                this.addressBar.value = normalizedUrl;
+
                 const tab = this.tabs.get(this.currentTabId);
                 if (!tab) return;
-                
-                // Update tab URL and title
-                tab.url = url;
+
+                tab.url = normalizedUrl;
                 tab.title = 'Loading...';
                 this.updateTabTitle(tab.id, tab.title);
-                
-                // Add to history
+
                 this.addToHistory({
-                    url: url,
+                    url: normalizedUrl,
                     title: 'Loading...',
                     timestamp: new Date().toISOString()
                 });
-                
-                // Update webview source
-                if (this.webview) {
-                    this.webview.src = url;
-                    this.showWebview();
+
+                const activeView = this.ensureWebview(this.currentTabId);
+                if (!activeView) return;
+
+                this.setActiveWebview(this.currentTabId);
+
+                if (this.isWebviewReady(this.currentTabId)) {
+                    activeView.src = normalizedUrl;
+                } else {
+                    this.pendingNavigations.set(this.currentTabId, normalizedUrl);
                 }
-                
-                // Show loading state
+                this.showWebview();
+
                 this.loadingBar.classList.add('active');
                 this.loadingStatus.textContent = 'Loading...';
-                
-                // Update security indicator
                 this.updateSecurityIndicator();
             }
             
             goBack() {
-                if (this.webview.canGoBack()) {
-                    this.webview.goBack();
+                const activeView = this.getActiveWebview();
+                if (!activeView || !this.isWebviewReady(this.currentTabId)) return;
+                if (activeView.canGoBack()) {
+                    activeView.goBack();
                 }
             }
-            
+
             goForward() {
-                if (this.webview.canGoForward()) {
-                    this.webview.goForward();
+                const activeView = this.getActiveWebview();
+                if (!activeView || !this.isWebviewReady(this.currentTabId)) return;
+                if (activeView.canGoForward()) {
+                    activeView.goForward();
                 }
             }
-            
+
             reload() {
+                const activeView = this.getActiveWebview();
+                if (!activeView || !this.isWebviewReady(this.currentTabId)) return;
                 const currentTab = this.getCurrentTab();
                 if (!currentTab || currentTab.url === 'chrome://newtab') {
                     this.showNewTabPage();
                 } else {
-                    this.webview.reload();
+                    activeView.reload();
                 }
             }
-            
+
             goHome() {
-                this.navigate('chrome://newtab');
+                this.showNewTabPage();
+                this.updateCurrentTab({ url: 'chrome://newtab', title: 'New Tab' });
             }
             
             // Tab Management
             createNewTab(url = 'chrome://newtab') {
                 this.nextTabId++;
                 const tabId = this.nextTabId.toString();
-                
+
                 const tab = {
                     id: tabId,
                     title: 'New Tab',
@@ -1441,29 +1904,38 @@
                     canGoForward: false,
                     isLoading: false
                 };
-                
+
                 this.tabs.set(tabId, tab);
                 this.addTabToUI(tab);
+                this.ensureWebview(tabId);
                 this.switchToTab(tabId);
-                
+
                 if (url !== 'chrome://newtab') {
                     this.navigate(url);
                 }
             }
-            
+
             closeTab(tabId) {
                 if (this.tabs.size <= 1) return; // Don't close last tab
-                
+
                 this.tabs.delete(tabId);
                 document.querySelector(`[data-tab-id="${tabId}"]`).remove();
-                
+
+                const webview = this.webviews.get(tabId);
+                if (webview) {
+                    webview.remove();
+                    this.webviews.delete(tabId);
+                    this.webviewReadyState.delete(tabId);
+                    this.pendingNavigations.delete(tabId);
+                }
+
                 if (this.currentTabId === tabId) {
                     // Switch to first available tab
                     const firstTab = this.tabs.keys().next().value;
                     this.switchToTab(firstTab);
                 }
             }
-            
+
             switchToTab(tabId) {
                 // Update UI
                 document.querySelectorAll('.tab').forEach(tab => {
@@ -1478,18 +1950,21 @@
                 if (tab) {
                     this.addressBar.value = tab.url;
                     this.updateNavigationButtons();
-                    
+
                     if (tab.url === 'chrome://newtab') {
                         this.showNewTabPage();
+                        this.setActiveWebview(tabId);
                     } else {
                         this.showWebview();
-                        if (this.webview.src !== tab.url) {
-                            this.webview.src = tab.url;
+                        this.setActiveWebview(tabId);
+                        const activeView = this.getActiveWebview();
+                        if (activeView && activeView.src !== tab.url) {
+                            activeView.src = tab.url;
                         }
                     }
                 }
             }
-            
+
             addTabToUI(tab) {
                 const tabElement = document.createElement('div');
                 tabElement.className = 'tab';
@@ -1517,23 +1992,26 @@
             }
             
             // Webview Events
-            onStartLoading() {
+            onStartLoading(tabId) {
                 this.loadingBar.classList.add('active');
                 this.loadingStatus.textContent = 'Loading...';
-                this.updateCurrentTab({ isLoading: true });
+                if (this.currentTabId === tabId) {
+                    this.updateCurrentTab({ isLoading: true });
+                }
             }
-            
-            onStopLoading() {
+
+            onStopLoading(tabId) {
                 this.loadingBar.classList.remove('active');
                 this.loadingStatus.textContent = '';
-                
+
                 // Update current tab
-                const tab = this.tabs.get(this.currentTabId);
-                if (tab && this.webview) {
+                const tab = this.tabs.get(tabId);
+                const webview = this.webviews.get(tabId);
+                if (tab && webview) {
                     // Update tab title from webview
-                    tab.title = this.webview.getTitle() || tab.url;
-                    tab.url = this.webview.getURL();
-                    
+                    tab.title = webview.getTitle() || tab.url;
+                    tab.url = webview.getURL();
+
                     // Update history with final title
                     if (this.history.length > 0) {
                         const lastEntry = this.history[this.history.length - 1];
@@ -1544,45 +2022,78 @@
                     }
                     
                     this.updateTabTitle(tab.id, tab.title);
+                    if (this.currentTabId === tabId) {
+                        this.addressBar.value = tab.url;
+                    }
                 }
-                
-                this.updateCurrentTab({ isLoading: false });
+
+                if (this.currentTabId === tabId) {
+                    this.updateCurrentTab({ isLoading: false });
+                }
             }
-            
-            onNavigate(e) {
-                this.addressBar.value = e.url;
-                this.updateCurrentTab({ url: e.url });
-                this.updateSecurityIndicator();
-                this.updateNavigationButtons();
-                this.pageStatus.textContent = `Navigated to ${new URL(e.url).hostname}`;
+
+            onNavigate(e, tabId) {
+                const tab = this.tabs.get(tabId);
+                if (tab) {
+                    tab.url = e.url;
+                    if (this.currentTabId === tabId) {
+                        this.addressBar.value = e.url;
+                        this.updateSecurityIndicator();
+                        this.updateNavigationButtons();
+                        this.pageStatus.textContent = `Navigated to ${new URL(e.url).hostname}`;
+                    }
+                }
             }
-            
-            onNavigateInPage(e) {
-                this.addressBar.value = e.url;
-                this.updateCurrentTab({ url: e.url });
-                this.updateNavigationButtons();
+
+            onNavigateInPage(e, tabId) {
+                const tab = this.tabs.get(tabId);
+                if (tab) {
+                    tab.url = e.url;
+                    if (this.currentTabId === tabId) {
+                        this.addressBar.value = e.url;
+                        this.updateNavigationButtons();
+                    }
+                }
             }
-            
-            onTitleUpdate(e) {
-                this.updateCurrentTab({ title: e.title });
-                this.updateTabTitle(this.currentTabId, e.title);
-                this.pageStatus.textContent = e.title;
+
+            onTitleUpdate(e, tabId) {
+                const tab = this.tabs.get(tabId);
+                if (tab) {
+                    tab.title = e.title;
+                    this.updateTabTitle(tabId, e.title);
+                    if (this.currentTabId === tabId) {
+                        this.pageStatus.textContent = e.title;
+                    }
+                }
             }
-            
-            onLoadFail(e) {
+
+            onLoadFail(e, tabId) {
                 this.loadingBar.classList.remove('active');
-                this.pageStatus.textContent = `Failed to load: ${e.errorDescription}`;
-                this.loadingStatus.textContent = 'Load failed';
+                if (this.currentTabId === tabId) {
+                    this.pageStatus.textContent = `Failed to load: ${e.errorDescription}`;
+                    this.loadingStatus.textContent = 'Load failed';
+                }
             }
-            
+
             onNewWindow(e) {
                 e.preventDefault();
                 this.createNewTab(e.url);
             }
-            
-            onDomReady() {
-                console.log('🌐 Page loaded successfully');
-                this.pageStatus.textContent = 'Page loaded';
+
+            onDomReady(tabId) {
+                this.setWebviewReady(tabId, true);
+                const pending = this.pendingNavigations.get(tabId);
+                if (pending) {
+                    this.pendingNavigations.delete(tabId);
+                    const webview = this.webviews.get(tabId);
+                    if (webview) {
+                        webview.src = pending;
+                    }
+                }
+
+                if (this.currentTabId === tabId) {
+                    this.pageStatus.textContent = 'Page loaded';
+                }
             }
             
             // UI Updates
@@ -1601,15 +2112,16 @@
             }
             
             updateNavigationButtons() {
-                if (!this.webview || !this.webview.isConnected) {
+                const activeView = this.getActiveWebview();
+                if (!activeView || !activeView.isConnected) {
                     this.backBtn.disabled = true;
                     this.forwardBtn.disabled = true;
                     return;
                 }
 
                 try {
-                    this.backBtn.disabled = !this.webview.canGoBack();
-                    this.forwardBtn.disabled = !this.webview.canGoForward();
+                    this.backBtn.disabled = !activeView.canGoBack();
+                    this.forwardBtn.disabled = !activeView.canGoForward();
                 } catch (error) {
                     console.warn('Navigation buttons unavailable yet:', error);
                     this.backBtn.disabled = true;
@@ -1635,14 +2147,19 @@
             
             showNewTabPage() {
                 this.newTabPage.classList.remove('hidden');
+                this.newTabPage.style.display = 'flex';
+                this.newTabPage.scrollTop = 0;
                 this.webviewContainer.classList.add('hidden');
+                this.webviewContainer.style.display = 'none';
                 this.addressBar.value = 'chrome://newtab';
                 this.updateCurrentTab({ url: 'chrome://newtab', title: 'New Tab' });
             }
             
             showWebview() {
                 this.newTabPage.classList.add('hidden');
+                this.newTabPage.style.display = 'none';
                 this.webviewContainer.classList.remove('hidden');
+                this.webviewContainer.style.display = 'block';
             }
             
             // Utility Functions
@@ -1694,13 +2211,26 @@
             }
             
             addBookmark(title, url) {
-                this.bookmarks.push({ title, url, timestamp: Date.now() });
+                if (!title) {
+                    title = url;
+                }
+
+                const existing = this.bookmarks.find(b => b.url === url);
+                if (existing) {
+                    existing.title = title;
+                    existing.timestamp = Date.now();
+                } else {
+                    this.bookmarks.push({ title, url, timestamp: Date.now() });
+                }
+
                 this.saveBookmarks();
+                this.renderBookmarksBar();
             }
             
             removeBookmark(url) {
                 this.bookmarks = this.bookmarks.filter(b => b.url !== url);
                 this.saveBookmarks();
+                this.renderBookmarksBar();
             }
             
             navigateToBookmark(url) {
@@ -1710,7 +2240,11 @@
             // Storage
             loadBookmarks() {
                 try {
-                    return JSON.parse(localStorage.getItem('v3x_bookmarks') || '[]');
+                    const stored = JSON.parse(localStorage.getItem('v3x_bookmarks') || '[]');
+                    if (Array.isArray(stored)) {
+                        return stored.filter(entry => entry && entry.url);
+                    }
+                    return [];
                 } catch {
                     return [];
                 }
@@ -1719,7 +2253,253 @@
             saveBookmarks() {
                 localStorage.setItem('v3x_bookmarks', JSON.stringify(this.bookmarks));
             }
-            
+
+            renderBookmarksBar() {
+                if (!this.bookmarksBar) return;
+
+                // Preserve built-in entries with data-static-bookmark
+                const staticButtons = Array.from(this.bookmarksBar.querySelectorAll('[data-static-bookmark]'));
+                this.bookmarksBar.innerHTML = '';
+                staticButtons.forEach(btn => this.bookmarksBar.appendChild(btn));
+
+                if (this.bookmarks.length === 0) {
+                    this.bookmarksBar.classList.add('bookmarks-empty');
+                } else {
+                    this.bookmarksBar.classList.remove('bookmarks-empty');
+                }
+
+                this.bookmarks
+                    .sort((a, b) => (a.title || a.url).localeCompare(b.title || b.url))
+                    .forEach(bookmark => {
+                        const button = document.createElement('button');
+                        button.className = 'bookmark';
+                        button.type = 'button';
+                        button.setAttribute('data-bookmark-url', bookmark.url);
+
+                        const icon = document.createElement('div');
+                        icon.className = 'bookmark-icon';
+                        icon.textContent = '🔖';
+
+                        const label = document.createElement('span');
+                        label.textContent = bookmark.title?.trim() || bookmark.url;
+
+                        button.appendChild(icon);
+                        button.appendChild(label);
+                        this.bookmarksBar.appendChild(button);
+                    });
+
+                this.renderBookmarksManager();
+                this.renderFloatingBookmarks();
+            }
+
+            renderFloatingBookmarks() {
+                if (!this.floatingBookmarksGrid) {
+                    return;
+                }
+
+                const container = this.floatingBookmarksGrid;
+                const emptyState = document.getElementById('floatingBookmarksEmpty');
+
+                container.querySelectorAll('.bookmark-card').forEach((node) => node.remove());
+
+                if (!this.bookmarks || this.bookmarks.length === 0) {
+                    if (emptyState) {
+                        emptyState.classList.remove('hidden');
+                    }
+                    if (this.bookmarkCountLabel) {
+                        this.bookmarkCountLabel.textContent = 'No bookmarks yet';
+                    }
+                    return;
+                }
+
+                if (emptyState) {
+                    emptyState.classList.add('hidden');
+                }
+
+                if (this.bookmarkCountLabel) {
+                    this.bookmarkCountLabel.textContent = `${this.bookmarks.length} saved`;
+                }
+
+                const fragment = document.createDocumentFragment();
+                const maxCards = Math.min(this.bookmarks.length, 12);
+
+                this.bookmarks
+                    .slice(0, maxCards)
+                    .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+                    .forEach((bookmark, index) => {
+                        const card = document.createElement('div');
+                        card.className = 'bookmark-card';
+                        card.setAttribute('data-bookmark-url', bookmark.url);
+                        card.style.animationDelay = `${index * 0.12}s`;
+
+                        const heading = document.createElement('h3');
+                        heading.textContent = bookmark.title?.trim() || new URL(bookmark.url).hostname;
+
+                        const description = document.createElement('p');
+                        description.textContent = 'Tap to launch instantly';
+
+                        const url = document.createElement('span');
+                        url.className = 'bookmark-url';
+                        url.textContent = bookmark.url;
+
+                        card.appendChild(heading);
+                        card.appendChild(description);
+                        card.appendChild(url);
+
+                        fragment.appendChild(card);
+                    });
+
+                container.appendChild(fragment);
+            }
+
+            initializeBookmarkManager() {
+                if (this.bookmarkPanelListeners) {
+                    return;
+                }
+
+                if (!this.bookmarksManager || !this.bookmarksList) {
+                    console.warn('Bookmark manager UI is not available.');
+                    return;
+                }
+
+                const handleSearchInput = () => {
+                    this.renderBookmarksManager();
+                };
+
+                const handleClose = () => {
+                    this.hideBookmarks();
+                };
+
+                const handleKeyDown = (event) => {
+                    if (event.key === 'Escape' && !this.bookmarksManager.classList.contains('hidden')) {
+                        this.hideBookmarks();
+                    }
+                };
+
+                const handleDocumentClick = (event) => {
+                    if (this.bookmarksManager.classList.contains('hidden')) {
+                        return;
+                    }
+
+                    if (this.bookmarksManager.contains(event.target)) {
+                        return;
+                    }
+
+                    const trigger = document.querySelector('[data-menu-action="openBookmarks"]');
+                    if (trigger && trigger.contains(event.target)) {
+                        return;
+                    }
+
+                    this.hideBookmarks();
+                };
+
+                const handleListClick = (event) => {
+                    const actionBtn = event.target.closest('[data-bookmark-action]');
+                    if (!actionBtn) return;
+
+                    const action = actionBtn.getAttribute('data-bookmark-action');
+                    const url = actionBtn.getAttribute('data-bookmark-url');
+                    if (!action || !url) return;
+
+                    if (action === 'open') {
+                        this.hideBookmarks();
+                        this.navigate(url);
+                    }
+
+                    if (action === 'remove') {
+                        this.removeBookmark(url);
+                    }
+                };
+
+                if (this.bookmarkSearchInput) {
+                    this.bookmarkSearchInput.addEventListener('input', handleSearchInput);
+                }
+
+                if (this.bookmarksCloseBtn) {
+                    this.bookmarksCloseBtn.addEventListener('click', handleClose);
+                }
+
+                this.bookmarksList.addEventListener('click', handleListClick);
+                document.addEventListener('keydown', handleKeyDown);
+                document.addEventListener('click', handleDocumentClick);
+
+                this.bookmarkPanelListeners = {
+                    handleSearchInput,
+                    handleClose,
+                    handleKeyDown,
+                    handleDocumentClick,
+                    handleListClick
+                };
+            }
+
+            renderBookmarksManager() {
+                if (!this.bookmarksList) {
+                    return;
+                }
+
+                const query = (this.bookmarkSearchInput?.value || '').trim().toLowerCase();
+                const filtered = this.bookmarks.filter((bookmark) => {
+                    if (!bookmark || !bookmark.url) return false;
+                    if (!query) return true;
+                    const title = bookmark.title || '';
+                    return title.toLowerCase().includes(query) || bookmark.url.toLowerCase().includes(query);
+                });
+
+                if (filtered.length === 0) {
+                    this.bookmarksList.innerHTML = '<div class="empty-state">No bookmarks saved yet</div>';
+                    return;
+                }
+
+                const fragment = document.createDocumentFragment();
+
+                filtered
+                    .sort((a, b) => (a.title || a.url).localeCompare(b.title || b.url))
+                    .forEach((bookmark) => {
+                        const item = document.createElement('div');
+                        item.className = 'bookmark-item';
+
+                        const info = document.createElement('div');
+                        info.className = 'bookmark-info';
+
+                        const title = document.createElement('div');
+                        title.className = 'title';
+                        title.textContent = bookmark.title?.trim() || bookmark.url;
+
+                        const url = document.createElement('div');
+                        url.className = 'url';
+                        url.textContent = bookmark.url;
+
+                        info.appendChild(title);
+                        info.appendChild(url);
+
+                        const actions = document.createElement('div');
+                        actions.className = 'bookmark-actions';
+
+                        const openBtn = document.createElement('button');
+                        openBtn.type = 'button';
+                        openBtn.textContent = 'Open';
+                        openBtn.setAttribute('data-bookmark-action', 'open');
+                        openBtn.setAttribute('data-bookmark-url', bookmark.url);
+
+                        const removeBtn = document.createElement('button');
+                        removeBtn.type = 'button';
+                        removeBtn.textContent = 'Delete';
+                        removeBtn.setAttribute('data-bookmark-action', 'remove');
+                        removeBtn.setAttribute('data-bookmark-url', bookmark.url);
+
+                        actions.appendChild(openBtn);
+                        actions.appendChild(removeBtn);
+
+                        item.appendChild(info);
+                        item.appendChild(actions);
+
+                        fragment.appendChild(item);
+                    });
+
+                this.bookmarksList.innerHTML = '';
+                this.bookmarksList.appendChild(fragment);
+            }
+
             loadHistory() {
                 try {
                     return JSON.parse(localStorage.getItem('v3x_history') || '[]');
@@ -1777,7 +2557,7 @@
                         
                         const favicon = document.createElement('div');
                         favicon.className = 'history-favicon';
-                        favicon.textContent = '🌐';
+                        favicon.textContent = '';
                         
                         const details = document.createElement('div');
                         details.className = 'history-details';
@@ -1836,6 +2616,37 @@
                     existingMenu.remove();
                 }
             }
+
+            showBookmarks() {
+                if (!this.bookmarksManager || !this.bookmarksList) {
+                    this.initializeBookmarkManager();
+                }
+
+                if (!this.bookmarksManager) {
+                    console.warn('Bookmark manager UI is not available.');
+                    return;
+                }
+
+                this.renderBookmarksManager();
+
+                this.bookmarksManager.classList.remove('hidden');
+                this.bookmarksManager.setAttribute('aria-hidden', 'false');
+
+                const searchInput = this.bookmarkSearchInput;
+                if (searchInput) {
+                    searchInput.focus();
+                    searchInput.select();
+                }
+            }
+
+            hideBookmarks() {
+                if (!this.bookmarksManager) {
+                    return;
+                }
+
+                this.bookmarksManager.classList.add('hidden');
+                this.bookmarksManager.setAttribute('aria-hidden', 'true');
+            }
             
             clearHistory() {
                 if (confirm('Are you sure you want to clear all browsing history?')) {
@@ -1871,11 +2682,11 @@
                 
                 // Add menu items
                 const items = [
-                    { text: 'Open', icon: '↗️', action: () => { this.navigate(entry.url); this.hideHistory(); } },
-                    { text: 'Open in New Tab', icon: '➕', action: () => this.createNewTab(entry.url) },
-                    { text: 'Copy URL', icon: '📋', action: () => this.copyToClipboard(entry.url) },
-                    { text: 'Remove from History', icon: '🗑️', action: () => this.removeHistoryItem(index) },
-                    { text: 'Clear All History', icon: '🚫', action: () => this.clearHistory() }
+                    { text: 'Open', icon: '', action: () => { this.navigate(entry.url); this.hideHistory(); } },
+                    { text: 'Open in New Tab', icon: '', action: () => this.createNewTab(entry.url) },
+                    { text: 'Copy URL', icon: '', action: () => this.copyToClipboard(entry.url) },
+                    { text: 'Remove from History', icon: '', action: () => this.removeHistoryItem(index) },
+                    { text: 'Clear All History', icon: '', action: () => this.clearHistory() }
                 ];
                 
                 items.forEach(item => {
@@ -1988,8 +2799,7 @@
             }
 
             openBookmarks() {
-                console.warn('Bookmarks manager is not implemented yet.');
-                alert('Bookmarks manager is coming soon.');
+                this.showBookmarks();
             }
 
             openSettings() {
@@ -2075,12 +2885,12 @@
         function toggleExtensions() { console.log('Toggle extensions'); }
         function toggleProfile() { console.log('Toggle profile'); }
         function openNewTab() { ensureBrowser(() => browser.openNewTab())(); }
-        function openNewWindow() { ensureBrowser(() => browser.openNewWindow())(); }
-        function openIncognito() { ensureBrowser(() => browser.openIncognito())(); }
+        function openNewWindow() { console.log('Open new window'); }
+        function openIncognito() { console.log('Open incognito window'); }
         function openHistory() { ensureBrowser(() => browser.openHistory())(); }
-        function openDownloads() { ensureBrowser(() => browser.openDownloads())(); }
+        function openDownloads() { console.log('Open downloads'); }
         function openBookmarks() { ensureBrowser(() => browser.openBookmarks())(); }
-        function openSettings() { ensureBrowser(() => browser.openSettings())(); }
+        function openSettings() { console.log('Open settings'); }
         function openDevTools() { ensureBrowser(() => browser.openDevTools())(); }
         function showAbout() { ensureBrowser(() => browser.showAbout())(); }
         
@@ -2089,5 +2899,21 @@
         
         console.log('🎯 V3X Browser Professional Edition - Script Loaded');
     </script>
+
+    <div id="bookmarksManager" class="side-panel hidden" aria-hidden="true">
+        <div class="side-panel-header">
+            <h3><i class="fas fa-bookmark"></i> Bookmarks</h3>
+            <div class="side-panel-actions">
+                <input type="text" id="bookmarkSearch" placeholder="Search bookmarks" aria-label="Search bookmarks" />
+                <button type="button" id="bookmarksCloseBtn" class="close-button" aria-label="Close">&times;</button>
+            </div>
+        </div>
+        <div class="side-panel-content">
+            <div id="bookmarksList" class="list"></div>
+        </div>
+        <div class="side-panel-footer">
+            <small>Right-click entries for actions.</small>
+        </div>
+    </div>
 </body>
 </html>

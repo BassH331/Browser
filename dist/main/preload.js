@@ -9,5 +9,6 @@ const electronAPI = {
     getBookmarks: () => electron_1.ipcRenderer.invoke('get-bookmarks'),
     addBookmark: (bookmark) => electron_1.ipcRenderer.invoke('add-bookmark', bookmark),
     removeBookmark: (url) => electron_1.ipcRenderer.invoke('remove-bookmark', url),
+    logEvent: (payload) => electron_1.ipcRenderer.send('renderer-log', payload)
 };
 electron_1.contextBridge.exposeInMainWorld('electronAPI', electronAPI);
